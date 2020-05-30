@@ -1,5 +1,5 @@
 build:
-	pdflatex percolation
+	pdflatex percolation -interaction=nonstopmode
 	bibtex percolation 
 	pdflatex percolation
 	open percolation.pdf

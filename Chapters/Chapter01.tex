@@ -8,6 +8,53 @@
 
 %----------------------------------------------------------------------------------------
 
+\section{Basic definitions}
+
+We begin with a graph G representing a slattice of size $L$ in $d$ dimensions, such that $|G| = L^d$. 
+Each node in the graph is independently set to be "alive"/"white" with probability $p$ and "dead"/"black" with probability $1-p$. $p$ is often called the occupation probability.
+Our goal is to study the properties of the lattice after this "coloring" has taken place. This is what such a lattice looks like: (IMAGE)
+
+
+\begin{defn}
+A cluster is a set of white connected nodes in the graph.
+\end{defn}
+
+
+\begin{defn}
+A lattice is said to have percolated if there exists a macroscopic cluster, i.e. a cluster which spans the whole lattice.
+\end{defn}
+
+For the case of $d<\inf$, one can (arbitrarily) pick a dimension $i$ from ${1, 2, ... d}$ and use it as the defining dimension for percolation, i.e. a lattice has percolated if there exists a cluster that intersects both boundaries of the lattice. For $d=2$, for example, we can use the convention that a lattice has percolated if there is a cluster that connects the top boundary and the bottom boundary (left-right would be equally good).
+
+The process is, of course, random. So we define an indicator random variable $H_{p,L}$ which represents whether a particular lattice has percolated: 
+
+% \[
+% 	
+%     \begin{dcases}
+%         
+%         
+%     \end{dcases}
+% \]
+\begin{defn}
+\[
+	H_{p,L} = 
+    \begin{dcases}
+        1 & \text{if lattice has percolated} \\
+        0 & \text{otherwise} \\
+    \end{dcases}
+\]
+\end{defn}
+As we shall see, percolation models are the simplest models that exibit a phase transition, meaning that there exists a particular occupation probability $p_c$ at which the behavior of the system is expected to change dramatically. This change will be reflected in a number of quantities of interest which will study in the next sections. It turns out that $p_c$ of the probability of seeing a percolating cluster.
+As we vary $p$, larger and larger clusters are expected to form. However, in the case that $L < \inf$ and $p < 1$, there is always a possilibity that no percolating cluster will be observed (i.e even if $p = 0.999$ there is a non-zero probability all nodes are dead). For this reason, $p_c$ is not well defined for finite $L$, and we'll  define it in the limit $L \xrightarrow \inf$. 
+
+We can think of $E[H_{p,L}]$ as the probability that a particular lattice will percolate. As we increase $L$, the behaviour of $E[H_{p,L}]$ as a function of $p$ approach a step function at $p=p_c$. Which means that in the limit of very big L, the lattice percolates with probability 1 for $p > p_c$, and does not percolate with probability 1 for $p < p_c$.  
+
+\begin{defn}
+The percolation threshold $p_c$ is the smallest occupation probability $p$ such that a percolating cluster exists with probability 1. 
+\end{defn}
+
+
+
 \section{1D Case: toy model}\label{sec:1d}
 
 \subsection{Percolation threshold $p_c$}
