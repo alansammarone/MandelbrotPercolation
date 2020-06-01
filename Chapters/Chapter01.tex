@@ -45,25 +45,60 @@ The process is, of course, random. So we define an indicator random variable $H_
 \]
 \end{defn}
 As we shall see, percolation models are the simplest models that exibit a phase transition, meaning that there exists a particular occupation probability $p_c$ at which the behavior of the system is expected to change dramatically. This change will be reflected in a number of quantities of interest which will study in the next sections. It turns out that $p_c$ of the probability of seeing a percolating cluster.
-As we vary $p$, larger and larger clusters are expected to form. However, in the case that $L < \inf$ and $p < 1$, there is always a possilibity that no percolating cluster will be observed (i.e even if $p = 0.999$ there is a non-zero probability all nodes are dead). For this reason, $p_c$ is not well defined for finite $L$, and we'll  define it in the limit $L \xrightarrow \inf$. 
+As we vary $p$, larger and larger clusters are expected to form. However, in the case that $L < \inf$ and $p < 1$, there is always a possilibity that no percolating cluster will be observed (i.e even if $p = 0.999$ there is a non-zero probability all nodes are dead). For this reason, $p_c$ is not well defined for finite $L$, and we'll  define it in the limit $L \to \infty$. 
 
-We can think of $E[H_{p,L}]$ as the probability that a particular lattice will percolate. As we increase $L$, the behaviour of $E[H_{p,L}]$ as a function of $p$ approach a step function at $p=p_c$. Which means that in the limit of very big L, the lattice percolates with probability 1 for $p > p_c$, and does not percolate with probability 1 for $p < p_c$.  
+\begin{defn}
+$\Pi_{p,L} = \E[H_{p,L}]$ is the probability that a particular lattice will percolate.
+\end{defn}
+
+As we increase $L$, the behaviour of $\Pi_{p,L}$ as a function of $p$ approach a step function at $p=p_c$. Which means that in the limit of very big L, the lattice percolates with probability 1 for $p > p_c$, and does not percolate with probability 1 for $p < p_c$. (PLOT)
 
 \begin{defn}
 The percolation threshold $p_c$ is the smallest occupation probability $p$ such that a percolating cluster exists with probability 1. 
 \end{defn}
 
 
+\begin{defn}
+$P_{p,L}$ is the fraction of nodes belonging to a percolating cluster.
+\end{defn}
 
-\section{1D Case: toy model}\label{sec:1d}
 
-\subsection{Percolation threshold $p_c$}
+Next, we'll look at some quantities of interest and study their behavior as a function of $p$, in particular for small values of $|p - p_c|$, i.e. for $p$ close to $p_c$. The reason for studying this particular regime will become apparent later.
 
-\subsection{Critical exponent $\sigma$}
 
-\subsection{Critical exponent $\gamma$}
+\begin{defn}
+	$n_{s}(p)$ is the number of s-sized clusters (clusters with s nodes) per lattice size.
 
-\subsection{Critical exponent $\nu$}
+\end{defn}
+
+\begin{defn}
+$\chi(p)$ is the average cluster size (excluding the percolating cluster).
+\end{defn}
+
+\begin{defn}
+	$s_{\xi}(p)$ is the average size of the largest cluster (excluding the percolating cluster).
+\end{defn}
+
+\begin{defn}
+$\xi(p)$ is the average linear size of the largest cluster (excluding the percolating cluster).
+\end{defn}
+
+
+
+% It is widely believed that many quantities of interest behave as $|p - p_c|$ to so
+
+
+
+
+% \section{1D Case: toy model}\label{sec:1d}
+
+% \subsection{Percolation threshold $p_c$}
+
+% \subsection{Critical exponent $\sigma$}
+
+% \subsection{Critical exponent $\gamma$}
+
+% \subsection{Critical exponent $\nu$}
 
 
 %----------------------------------------------------------------------------------------
