@@ -2,7 +2,7 @@
 
 \chapter{Classic percolation}
 
-\label{ch:classicpercolation} % For referencing the chapter elsewhere, use \autoref{ch:introduction} 
+\label{ch:classicpercolation} % For referencing the chapter elsewhere, use \autoref{ch:introduction}
 
 %----------------------------------------------------------------------------------------
 
@@ -10,7 +10,7 @@
 
 \section{Basic definitions}
 
-We begin with a graph G representing a slattice of size $L$ in $d$ dimensions, such that $|G| = L^d$. 
+We begin with a graph G representing a slattice of size $L$ in $d$ dimensions, such that $|G| = L^d$.
 Each node in the graph is independently set to be "alive"/"white" with probability $p$ and "dead"/"black" with probability $1-p$. $p$ is often called the occupation probability.
 Our goal is to study the properties of the lattice after this "coloring" has taken place. This is what such a lattice looks like: (IMAGE)
 
@@ -26,37 +26,31 @@ A lattice is said to have percolated if there exists a macroscopic cluster, i.e.
 
 For the case of $d<\inf$, one can (arbitrarily) pick a dimension $i$ from ${1, 2, ... d}$ and use it as the defining dimension for percolation, i.e. a lattice has percolated if there exists a cluster that intersects both boundaries of the lattice. For $d=2$, for example, we can use the convention that a lattice has percolated if there is a cluster that connects the top boundary and the bottom boundary (left-right would be equally good).
 
-The process is, of course, random. So we define an indicator random variable $H_{p,L}$ which represents whether a particular lattice has percolated: 
+The process is, of course, random. So we define an indicator random variable $H_{p,L}$ which represents whether a particular lattice has percolated:
 
-% \[
-% 	
-%     \begin{dcases}
-%         
-%         
-%     \end{dcases}
-% \]
 \begin{defn}
 \[
-	H_{p,L} = 
+	H_{p,L} =
     \begin{dcases}
         1 & \text{if lattice has percolated} \\
         0 & \text{otherwise} \\
     \end{dcases}
 \]
 \end{defn}
-As we shall see, percolation models are the simplest models that exibit a phase transition, meaning that there exists a particular occupation probability $p_c$ at which the behavior of the system is expected to change dramatically. This change will be reflected in a number of quantities of interest which will study in the next sections. It turns out that $p_c$ of the probability of seeing a percolating cluster.
-As we vary $p$, larger and larger clusters are expected to form. However, in the case that $L < \inf$ and $p < 1$, there is always a possilibity that no percolating cluster will be observed (i.e even if $p = 0.999$ there is a non-zero probability all nodes are dead). For this reason, $p_c$ is not well defined for finite $L$, and we'll  define it in the limit $L \to \infty$. 
+As we shall see, percolation models are the simplest models that exibit a phase transition, meaning that there exists a particular occupation probability $p_c$ at which the behavior of the system is expected to change dramatically. This change will be reflected in a number of quantities of interest which will study in the next sections.
+As we vary $p$, larger and larger clusters are expected to form. However, in the case that $L < \inf$ and $p < 1$, there is always a possibility that no percolating cluster will be observed (i.e even if $p = 0.999$ there is a non-zero probability all nodes are dead).
 
 \begin{defn}
 $\Pi_{p,L} = \E[H_{p,L}]$ is the probability that a particular lattice will percolate.
 \end{defn}
 
-As we increase $L$, the behaviour of $\Pi_{p,L}$ as a function of $p$ approach a step function at $p=p_c$. Which means that in the limit of very big L, the lattice percolates with probability 1 for $p > p_c$, and does not percolate with probability 1 for $p < p_c$. (PLOT)
+As we increase $L$, the behaviour of $\Pi_{p,L}$ as a function of $p$ approach a step function at $p=p_c$. Which means that in the limit of very big L, the lattice percolates with probability 1 for $p > p_c$, and does not percolate with probability 1 for $p < p_c$.
 
 \begin{defn}
-The percolation threshold $p_c$ is the smallest occupation probability $p$ such that a percolating cluster exists with probability 1. 
+The percolation threshold $p_c$ is the occupation probability $p$ such that a percolating cluster exists with probability $1$ on an infinite lattice (that is, in the limit $L \rightarrow \infty $).
 \end{defn}
 
+At this point, its not entirely obvious why we choose this particular definition. One could, a priori, choose to define $p_c$ as the probability at which there is a $\frac{1}{2}$ probability that the lattice percolates, for example. Or one could choose to define it in terms of a finite lattice. As we shall see, the definition given above is the only one that is well definited when we start working with multiple dimensions and multiple types of lattices.
 
 \begin{defn}
 $P_{p,L}$ is the fraction of nodes belonging to a percolating cluster.
@@ -67,46 +61,89 @@ Next, we'll look at some quantities of interest and study their behavior as a fu
 
 
 \begin{defn}
-	$n_{s}(p)$ is the number of s-sized clusters (clusters with s nodes) per lattice size.
-
+	$n_{s}(p)$ is the cluster size distribution, i.e the number of s-sized clusters (clusters with s nodes) per lattice size.
 \end{defn}
 
 \begin{defn}
-$\chi(p)$ is the average cluster size (excluding the percolating cluster).
+$\chi(p)$ is the average cluster size.
 \end{defn}
 
 \begin{defn}
-	$s_{\xi}(p)$ is the average size of the largest cluster (excluding the percolating cluster).
+	$s_{\xi}(p)$ is the average size of the largest cluster.
 \end{defn}
 
 \begin{defn}
-$\xi(p)$ is the average linear size of the largest cluster (excluding the percolating cluster).
+$\xi(p)$ is the average linear size of the largest cluster.
 \end{defn}
 
 
 
-% It is widely believed that many quantities of interest behave as $|p - p_c|$ to so
+\section{1D Case: toy model}\label{sec:1d}
 
+Our goal now is to better understand the 1D case. It is one of the few percolation models that can be solved analitically, and therefore can give us some insight into the dynamics of the system. Many of the properties exhibited still extend to higher dimensions, if one knows where to look.
 
+\begin{figure}[h]
+  \includegraphics[width=\linewidth]{Images/1dlattice.png}
+  \caption{A 1D lattice of size L, with a few dead nodes}
+  \label{fig:1dlattice}
+\end{figure}
 
+For simplicity, we'll define a new indicator random variable $S_i$ which denotes the state of the i-th node in the lattice. The PMF for $S_i$ is
 
-% \section{1D Case: toy model}\label{sec:1d}
+$$
+	S(i) =
+    \begin{dcases}
+        1 & \text{with probability p} \\
+        0 & \text{with probability 1-p} \\
+    \end{dcases}
+$$
 
-% \subsection{Percolation threshold $p_c$}
+\subsection{Percolation threshold $p_c$}
 
-% \subsection{Critical exponent $\sigma$}
+For a 1D lattice, it is clear that percolation can only happen in a lattice of size $L$ if all nodes in the lattice are dead. Since each coloring is independent, we have that
 
-% \subsection{Critical exponent $\gamma$}
+\begin{equation}
+	\begin{split}
+		\Pi_{p,L} & = \Pr[S(1) = 1, ... S(L) = 1] \\
+				  &	=  Pr[S(1) = 1]...\Pr[S(L) = 1] \\
+				  & =  p^L
+	\end{split}
+\end{equation}
 
-% \subsection{Critical exponent $\nu$}
+It is clear that in the limit $L \rightarrow \infty $, if $p < 1$, $\Pi_{p,L} = 0$.
+Therefore, we have that
 
+$$
+p_c = 1
+$$
+
+\subsection{Cluster size distribution}
+
+\subsection{Average cluster size}
+
+\subsection{Average size of largest cluster}
+
+\subsection{Average linear size of the largest cluster}
 
 %----------------------------------------------------------------------------------------
+
 
 \section{2D case in square lattice}\label{sec:2dsquare}
 
 
-\subsection{Critical exponents}
+\section{Critical exponents}
+
+The basic quantities we studied in the previous section share an interesting property: all of them behave similarly near $p_c$. In this section, we study the behavior of these quantities when $|p - p_c|$ is small.
+
+\subsection{Critical exponent $\sigma$}
+
+\subsection{Critical exponent $\gamma$}
+
+\subsection{Critical exponent $\nu$}
+
+
+\section{Further properties}
+
 
 \subsection{Correlation length}
 
@@ -115,9 +152,45 @@ $\xi(p)$ is the average linear size of the largest cluster (excluding the percol
 \subsection{Real space renormalisation}
 
 
+
+
+\begin{figure}[h]
+  % \includegraphics[width=300pt]{Images/perc_2d_prob.png}
+  % \caption{Percolation probability for various lattice sizes.}
+  % \label{fig:2dlattice_perc_prob}
+
+\centering%
+\makebox[\textwidth][r]{% %%% you make a box which width is
+%%% not important for the contents of the box itself
+%%% (\textwidth) and which will flush [r] from the right
+%%% ([l] from the left) margin of the text; whatever doesn't
+%%% find place in the box will exceed in the opposite side.
+%%% Please note that a curly brace is still open.
+\includegraphics[width=.8\largefigure]{Images/perc_2d_prob.png} %%% you
+%%% can now include your graphic with the usual option for
+%%% \includegrephics
+} %%% Here you "close the box"
+\end{figure}
+
+
+% \subsection{Critical exponents}
+
+% \subsection{Correlation length}
+
+% \subsection{Phase transitions}
+
+% \subsection{Real space renormalisation}
+
+
 %----------------------------------------------------------------------------------------
 
-\section{Bethe lattice}\label{sec:2dgeneral}
+\section{2D in hexagonal lattice}
+
+
+\section{Bethe lattice}\label{sec:bethelattice}
+
+
+
 
 
 

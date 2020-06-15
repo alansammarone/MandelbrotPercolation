@@ -36,7 +36,9 @@
 \newcommand{\ie}{i.\,e.}
 \newcommand{\Ie}{I.\,e.}
 \newcommand{\eg}{e.\,g.}
-\newcommand{\Eg}{E.\,g.} 
+\newcommand{\Eg}{E.\,g.}
+
+
 
 \newcounter{dummy} % Necessary for correct hyperlinks (to index, bib, etc.)
 \providecommand{\mLyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
@@ -49,6 +51,16 @@
 
 \usepackage{mathtools}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{calc}
+
+\newlength\largefigure % to create a new length
+\setlength{\largefigure}{\columnwidth+\marginparsep+%
+\marginparwidth} %%% to set largefigure as the sum of the
+%%% width of the text, of the width of the margin note and
+%%% of the width of the white spaces between the thext and
+%%% the margin note.
+%%
 
 %------------------------------------------------
 
@@ -57,7 +69,7 @@
 %\PassOptionsToPackage{spanish,es-lcroman}{babel}
 \usepackage{babel}
 
-%------------------------------------------------			
+%------------------------------------------------
 
 \usepackage{csquotes}
 \PassOptionsToPackage{%
@@ -73,12 +85,12 @@ maxbibnames=10, % default: 3, et al.
 natbib=true % natbib compatibility mode (\citep and \citet still work)
 }{biblatex}
 \usepackage{biblatex}
- 
+
  %------------------------------------------------
 
-\PassOptionsToPackage{fleqn}{amsmath} % Math environments and more by the AMS 
+\PassOptionsToPackage{fleqn}{amsmath} % Math environments and more by the AMS
  \usepackage{amsmath}
- 
+
  %------------------------------------------------
 
 \PassOptionsToPackage{T1}{fontenc} % T2A for cyrillics
@@ -90,7 +102,7 @@ natbib=true % natbib compatibility mode (\citep and \citet still work)
 
 %------------------------------------------------
 
-\usepackage{scrhack} % Fix warnings when using KOMA with listings package  
+\usepackage{scrhack} % Fix warnings when using KOMA with listings package
 
 %------------------------------------------------
 
@@ -102,7 +114,7 @@ natbib=true % natbib compatibility mode (\citep and \citet still work)
 
 %------------------------------------------------
 
-\usepackage{fixltx2e} % Fixes some LaTeX stuff 
+\usepackage{fixltx2e} % Fixes some LaTeX stuff
 
 %------------------------------------------------
 
@@ -112,10 +124,11 @@ natbib=true % natbib compatibility mode (\citep and \citet still work)
 %\renewcommand*{\acsfont}[1]{\textssc{#1}} % For MinionPro
 \renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
 
+
 %------------------------------------------------
 
 \PassOptionsToPackage{pdftex}{graphicx}
-\usepackage{graphicx} 
+\usepackage{graphicx}
 
 %----------------------------------------------------------------------------------------
 %	FLOATS: TABLES, FIGURES AND CAPTIONS SETUP
@@ -127,20 +140,20 @@ natbib=true % natbib compatibility mode (\citep and \citet still work)
 \newcommand{\myfloatalign}{\centering} % To be used with each float for alignment
 \usepackage{caption}
 \captionsetup{font=small}
-\usepackage{subfig}  
+\usepackage{subfig}
 
 
 %----------------------------------------------------------------------------------------
 %	DECLARATIONS
 %----------------------------------------------------------------------------------------
-\DeclareMathOperator{\E}{\mathbb{E}} 
+\DeclareMathOperator{\E}{\mathbb{E}}
 
 
 %----------------------------------------------------------------------------------------
 %	CODE LISTINGS SETUP
 %----------------------------------------------------------------------------------------
 
-\usepackage{listings} 
+\usepackage{listings}
 %\lstset{emph={trueIndex,root},emphstyle=\color{BlueViolet}}%\underbar} % For special keywords
 \lstset{language=[LaTeX]Tex,%C++ % Specify the language(s) for listings here
 morekeywords={PassOptionsToPackage,selectlanguage},
@@ -171,10 +184,10 @@ belowcaptionskip=.75\baselineskip % Space after the "Listing #: Desciption" text
 
 \hypersetup{
 % Uncomment the line below to remove all links (to references, figures, tables, etc), useful for b/w printouts
-%draft, 
+%draft,
 colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,
 % Uncomment the line below if you want to have black links (e.g. for printing black and white)
-%colorlinks=false, linktocpage=false, pdfborder={0 0 0}, pdfstartpage=3, pdfstartview=FitV, 
+%colorlinks=false, linktocpage=false, pdfborder={0 0 0}, pdfstartpage=3, pdfstartview=FitV,
 breaklinks=true, pdfpagemode=UseNone, pageanchor=true, pdfpagemode=UseOutlines,%
 plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
 hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
@@ -193,7 +206,7 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 
 %----------------------------------------------------------------------------------------
 %	AUTOREFERENCES SETUP
-%	Redefines how references in text are prefaced for different 
+%	Redefines how references in text are prefaced for different
 %	languages (e.g. "Section 1.2" or "section 1.2")
 %----------------------------------------------------------------------------------------
 
@@ -225,10 +238,10 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 
 %----------------------------------------------------------------------------------------
 
-\usepackage{classicthesis} 
+\usepackage{classicthesis}
 
 %----------------------------------------------------------------------------------------
-%	CHANGING TEXT AREA 
+%	CHANGING TEXT AREA
 %----------------------------------------------------------------------------------------
 
 %\linespread{1.05} % a bit more for Palatino
@@ -245,7 +258,7 @@ pdfproducer={LaTeX with hyperref and classicthesis}
 %\usepackage[light,condensed,math]{iwona}
 %\renewcommand{\sfdefault}{iwona}
 %\usepackage{lmodern} % <-- no osf support :-(
-%\usepackage{cfr-lm} % 
+%\usepackage{cfr-lm} %
 %\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
-%\usepackage[default,osfigures]{opensans} % scale=0.95 
+%\usepackage[default,osfigures]{opensans} % scale=0.95
 %\usepackage[sfdefault]{FiraSans}
