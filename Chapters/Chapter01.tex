@@ -105,7 +105,7 @@ For a 1D lattice, it is clear that percolation can only happen in a lattice of s
 \begin{equation}
 	\begin{split}
 		\Pi_{p,L} & = \Pr[S(1) = 1, ... S(L) = 1] \\
-				  &	=  Pr[S(1) = 1]...\Pr[S(L) = 1] \\
+				  &	=  \Pr[S(1) = 1]...\Pr[S(L) = 1] \\
 				  & =  p^L
 	\end{split}
 \end{equation}
@@ -116,6 +116,24 @@ Therefore, we have that
 $$
 p_c = 1
 $$
+
+
+It is interesting to notice here that if we were to define $p_c$ in any simpler way, its value would depend on the size of the lattice. For example, suppose we chose to define $p_c$ as the smallest $p$ such that
+$$
+  \Pi_{p,L} \geq \alpha
+$$
+
+For some $0 < \alpha < 1$. In other words, if $\alpha$ was $\frac{1}{2}$, that would be equivalent to defining $p_c$ as the smallest $p$ such that the lattice percolates with probability $\frac{1}{2}$. Then we'd have
+
+\[
+\begin{split}
+  & \Pi_{p,L}  \geq \alpha \\
+  & \Rightarrow p^L \geq \alpha \\
+  & \Rightarrow p \geq \alpha^{\frac{1}{L}}
+\end{split}
+\]
+
+We'd like to make our definitions as universal as possible, in particular we'd like our definition to be indepedent of the size of the lattice. The definition we chose previously accomplishes that. We will see more ways in which any other definition fails in the 2D case as well.
 
 \subsection{Cluster size distribution}
 
