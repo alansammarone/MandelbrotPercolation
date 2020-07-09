@@ -137,6 +137,37 @@ We'd like to make our definitions as universal as possible, in particular we'd l
 
 \subsection{Cluster size distribution}
 
+The first non-trivial quantity we want to look at is the cluster size distribution, $n_s$. For a given combination ($p$, $L$) of occupation probability and lattice size, $n_s$ describes the number of $s$-clusters - that is, clusters with s nodes - \textit{per lattice site}.
+
+For the 1D case, we can easily find an analytical expression for $n_s$. Let's start by considering a very long lattice (or equivalently, $L \gg s$). In this case, an s-cluster happens if and only if we see a sequence of $s$ black cells enclosed by a white cells at the left and right boundaries. The probability for a white cell is $(1-p)$, and the probability of a black cell is $p$. Therefore, we expect that the probability of seeing an s-cluster somewhere along the lattice is proportional to $(1-p)^2 p^2$. We also expect that by doubling the size of the lattice, we'll see twice as many s-clusters. Therefore, we expect to see
+\begin{equation}
+  \langle n_s \rangle \propto L (1-p)^2 p^s \label{chap1_clust_size_dist}
+\end{equation}
+
+Below, we can see the cluster size distribution obtained from simulations we've run, for various combinations of $p$ and $L$:
+
+\begin{figure}[h]
+  \includegraphics[width=\linewidth]{Images/chap1_clust_size_dist_256.png}
+  \caption{Average cluster size distribution in a 1D lattice with $L=256$}
+  \label{fig:chap1_clust_size_dist_256}
+\end{figure}
+
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Images/chap1_clust_size_dist_1024.png}
+  \caption{Average cluster size distribution in a 1D lattice with $L=1024$}
+  \label{fig:chap1_clust_size_dist_1024}
+\end{figure}
+
+
+One interesting thing to notice is that as we increase $p$, the distribution becomes less pronounced towards smaller clusters. Its easy to see why happens by looking at \eqref{chap1_clust_size_dist}: the ratio of 1-cluster and 2-clusters, for examples, decreases as we increase $p$:
+
+$$
+\frac{n_1}{n_2} \propto \frac{1}{p}
+$$
+
+Therefore, we expect a bigger difference between $n_1$ and $n_2$ for smaller $p$.
+
 \subsection{Average cluster size}
 
 \subsection{Average size of largest cluster}
