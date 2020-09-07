@@ -198,6 +198,8 @@ Again, the errors in the calculation of $\chi(p)$ are estimated by the standard 
 
 
 
+The correlation function was estimated by repeatedly (128000 times) selecting two random nodes from the lattice, computing its distance (we used the Manhattan distance (REF)), and then checking whether they belong to the same finite cluster. Averaging over many lattices, this allows us to to estimate the probability that two nodes at a given distance belong to the same cluster, which is the definition of the correlation function $g(r)$.
+
 
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{Images/sec3_corr_func_1.png}
@@ -205,6 +207,14 @@ Again, the errors in the calculation of $\chi(p)$ are estimated by the standard 
   \label{fig:sec3_corr_func_1}
 \end{figure}
 
+
+To estimate the correlation length $\xi$, we fitted the data obtained above to the function below
+
+$$ 
+ g(r) \propto r^{-\nu} e^{-\frac{r}{\xi}}
+$$ 
+
+This gives us the plot below
 
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{Images/sec3_corr_length_1.png}
@@ -217,8 +227,5 @@ Again, the errors in the calculation of $\chi(p)$ are estimated by the standard 
 
 % In 2D percolation, it is normally assumed that $g(r)$ behaves as the product of a power function and a exponential function(REF4), i.e 
 
-$$ 
- g(r) \propto r^{-\nu} e^{-\frac{r}{\xi}}
-$$ 
 
 \clearpage
