@@ -56,11 +56,7 @@ Percolation theory refers to the study of the structure of clusters formed in th
 \autoref{fig:1dlattice} and \autoref{fig:2dlattice} provide examples of percolation in 1D and 2D lattices.
 
 
-\begin{figure}[H]
-  \includegraphics[width=\linewidth]{Images/2dlattice.png}
-  \caption{A finite piece of an infinite 2D lattice. The largest cluster is made up of the nodes with circles painted, while the smaller clusters are denoted by open circles.}
-  \label{fig:2dlattice}
-\end{figure}
+
 
 
 In biology, percolation theory has been used to successfully predict the fragmentation of biological virus shells (REF), with the percolation threshold of Hepatitis B virus capsid predicted and detected experimentally (REF). In environmental science, percolation theory has been applied to studies of how environment fragmentation impacts animal habitats (REF) and models of how the plague bacterium Yersinia pestis spreads (REF).
@@ -68,8 +64,14 @@ In biology, percolation theory has been used to successfully predict the fragmen
 
 Our goal will be to study the behavior of some quantities of interest associated with percolation models.
 
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Images/2dlattice.png}
+  \caption{A finite piece of an infinite 2D lattice. The largest cluster is made up of the nodes with circles painted, while the smaller clusters are denoted by open circles.}
+  \label{fig:2dlattice}
+\end{figure}
 
 \section{Percolating cluster strength}
+\label{sec:th_percolating_cluster_strength}
 
 The first interesting quantity we can look at is the percolating strength $P(p)$. This quantity  represents the probability that a randomly picked node belongs to the percolating cluster. Another way to think of this quantity is that it represents the fraction of the whole lattice that is covered by the percolating cluster. 
 
@@ -88,6 +90,7 @@ P(p) is one of the order parameters for percolating systems, since it is zero fo
 
 
 \section{Mean cluster size}
+\label{sec:th_mean_cluster_size}
 
 Another interesting quantity is $\chi(p)$, the mean cluster size, which is the average number of nodes in among finite clusters. One can think of each node in the cluster as having one "unit of mass", in which case the mean cluster size represents the average mass. Just like $P(p)$, for $\chi(p)$, we have
 
@@ -201,15 +204,4 @@ The mean cluster size $\chi(p)$ is related to $n(s, n)$ through
 \end{equation}
 
 As noted before, $s\, n(s, p)$ represents the probability that a randomly picked node belongs to a (finite) s-cluster. Therefore, $\sum_s s^2\, n(s, p)$ represents the expected value of $s$.
-
-
-%----------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
