@@ -1,9 +1,108 @@
 \chapter{Code}
-\url{https://github.com/alansammarone/musk}
+
+
+\section{Overview}
+Musk is a Python library developed as part of this work to help us run and store simulations and statistics in a distributed, highly parallel fashion. The code is available in Github\footnote{\url{https://github.com/alansammarone/musk}}.
+
+To achieve an arbitrary amount of parallelism, Musk makes use of an independent queue service. The current version uses Amazon SQS\footnote{\url{https://aws.amazon.com/sqs/}}, but the code is easily extensible to make use of other popular queue services, such as RabbitMQ or Kafka. The general idea is that there a script (referred to as the enqueuer) which sends messages to a specific queue, and each message represents a particular computation one wishes to perform. This is what a message looks like (in terms of data structures, it is just a Python dictionary):
+
+\begin{python}
+{
+    "parameters": {
+        "probability": 0.553, 
+        "size":256,
+        "repeat":128
+    } 
+}
+
+\end{python}
+
+This particular message encapsulates the parameters of the simulation we want to run - the occupation probability, the lattice size, and how many time we want to repeat the process. In general, one generates thousands of messages like this and sends them to a queue (which is particular to a specific type of model - 2D classical percolation and Mandelbrot percolation, for example, have different queues), where they sit and wait further processing. We also have messages that represent instructions to compute statistics for a particular simulation, such as mean cluster size and percolation probability, but they follow the same general structure.
+
+
+We also have a script called the dequeuer. It can (and should, in general) run on a number of separate machine and it's job is to read from messages from a queue and process them. Since it is completely separate from the enqueuer, we can horizontally scale the system as much as like - during our simulations, we used up to 30 virtual machines running 2 instances of dequeuer each, for a total of 60 dequeuer processes constantly (once every 2 seconds) reading the queues and in case a message is found, processing it and then deleting it. 
+
+To store data, we use the popular open source database called MySQL\footnote{\url{https://www.mysql.com/}}. Each simulation is stored as a row, containing the parameters as well as clusters on the lattice after the simulation is run. The statistics (mean cluster size, percolating cluster strength, etc) are stored as rows on a different table.
+
+
+In general, the process to run the simulations and statistical analysis is the following:
+
+\begin{enumerate}
+  \item Run the simulation enqueuer with the appropriate parameter range configuration to generate messages representing the simulations one wishes to run
+  \item Run the simulation dequeuer (potentially on multiple machines) and wait for all the computation to finish (depending on the number of messages, this could take weeks). This is generate many rows in the MySQL database.
+  \item Run the statistics enqueuer, which will read the rows written in the previous step and generate one message per row 
+  \item Run the statistics dequeuer, which will read the messages sent to the queue in the previous step, compute the desired statistics, and write the results in a separate table.
+\end{enumerate}
+
+\section{Classes and scripts}
+
+The library is made up of several classes, each having a particular responsibility and implementation. We hope this section can serve as inspiration for anyone interested in using this library and/or coding their own distributed processing framework.
+
+\begin{itemize}
+    \raggedright\item \textbf{Lattice classes} (\pyth{Lattice}, \pyth{Square2DLattice}, \pyth{Square2DPeriodicLattice} and \pyth{Square2DFiniteLattice})\footnote{\url{https://github.com/alansammarone/musk/tree/master/musk/lattices}}: These represent the lattices, in increasing order of specialization (via inheritance). They contain operations such as neighbour resolution, filling the lattice randomly, subdividing, and cluster computations.
+    
+    \raggedright\item \textbf{Model classes} (\pyth{PercolationModel}, \pyth{PercolationStatsModel}, \pyth{P2MModel} and \pyth{P2MStatsModel})\footnote{\url{https://github.com/alansammarone/musk/tree/master/musk/percolation}}: Models contain the interface to the database - each model class represents a single database table, and contains one attribute for each column in the corresponding table. The class also contain SQL queries for reading/writing. An instance of this class represents a row.
+    
+    \raggedright\item \textbf{Simulation classes} (\pyth{Simulation}, \pyth{PercolationSimulation} and \pyth{P2MSimulation})\footnote{\url{https://github.com/alansammarone/musk/tree/master/musk/percolation}}: Simulation classes use the lattice classes to actually execute the simulations, and then use the model classes to store and/or retrieve the results to/from the database.
+    
+    
+    \raggedright\item \textbf{Processor classes} (\pyth{Processor}, \pyth{PercolationProcessor} and \pyth{PercolationStatsProcessor}, \pyth{PercolationStatsProcessor}, \pyth{P2MProcessor})\footnote{\url{https://github.com/alansammarone/musk/tree/master/musk/percolation}}: Processors are responsible for processing a queue message (and then, if the processing was successful, deleting the message). In the case of simulations, they delegate the bulk of the work to the \pyth{Simulation} classes described above. In the case of statistics, they contain the statistics computations directly.
+    
+    \raggedright\item \textbf{Queue-related classes} (\pyth{Queue}, \pyth{Message}, \pyth{SQSQueue},  \pyth{SQSMessage})\footnote{\url{https://github.com/alansammarone/musk/tree/master/musk/core}}: These are responsible for various aspects of the queue system - creating and updating queues, as well as sending, reading and deleting messages from them.
+    
+    \raggedright\item \textbf{Dequeuer class} (\pyth{Dequeuer})\footnote{\url{https://github.com/alansammarone/musk/blob/master/musk/core/dequeuer.py}}: This class receives an instance of the \pyth{Queue} class and an instance of a \pyth{Processor} class. Is is then responsible for reading messages from the queue and appropriately routing them to the processor instance. 
+    
+    
+    \raggedright\item\textbf{Dequeuer runner class and script} (\pyth{DequeuerRunner})\footnote{\url{https://github.com/alansammarone/musk/blob/master/scripts/dequeuer_runner.py}}: The \pyth{DequeuerRunner} class collects a set of dequeuer instances (one for each queue-processor pair) and is responsible for scheduling the execution of each. This includes spawning  new processes to handle messages after a given threshold is reached (this is necessary since Python contains inherent memory leaks that are very hard to deal with - it's simpler to just rerun the interpreter in a new process). There is also a \pyth{run_dequeuer.sh} script which is responsible for actually running the main Python file with correct environment variables and permissions.
+    
+    \raggedright\item \textbf{Enqueuer script} \footnote{\url{https://github.com/alansammarone/musk/blob/master/scripts/enqueuer.py}}: This script is responsible for generating and sending messages to their appropriate queue for actual processing (which is done by the dequeuer classes described above).
+    
+    
+\section{Deployment}
+
+Musk can be deployed quickly to any number of worker nodes (the deploy happens in parallel, so deploying to 100 workers takes around the same time as deploying to a single worker), each of which will process messages and write to the database independently of the others. To accomplish this, we use Ansible\footnote{\url{https://www.ansible.com}}, an open source automation tool supported by the Red Hat foundation. After configuring the inventory file, one simply needs to run the playbook filefile\footnote{\url{https://github.com/alansammarone/musk/blob/master/deploy/worker.yaml}} (using \pyth{ansible-playbook}), which will then, in all worker nodes, install the proper version of Python, all the required dependencies, set up configuration files, clone the Github repository, and set up a cron job to watch the queues (which is run every minute, but this can easily be changed in the configurations).
+
+\end{itemize}
+
+
+\clearpage
+
 \clearpage
 
 \chapter{Data}
-\url{https://github.com/alansammarone/MandelbrotPercolation/data/mysql_dump.tar.gz}
+We provide the simulation data used in this work as a \pyth{.sql} file\footnote{\url{http://tiny.cc/muskdatadump}}, which is a MySQL database dump. If this file is not available at the time of reading, simply contact the author at the email address provided at the beginning of the thesis.
+
+
+Below, for every table, we describe the fields and their data types. Each row corresponds to a particular simulation sample. The tables contains several dozen million rows each.
+
+\begin{itemize}
+    \item Table \textbf{p2s}: This table contains the simulation data for the classical 2D square percolation model
+    \begin{itemize}
+        \item \textbf{id} int: A primary key which uniquely identifies each row
+        \item \textbf{probability} float: The occupation probability used in this simulation
+        \item \textbf{size} smallint: The size of the lattice - note that a 2D square lattice with a given size has $\textrm{size}^2$ nodes.
+        \item \textbf{observables} mediumblob: Contains a bz2-compressed list of clusters present in the lattice
+        \item \textbf{took} float: How long the simulation took
+        \item \textbf{created} timestamp: The time at which this simulation was created.
+    \end{itemize}
+    \item Table \textbf{p2s\_stats}: This table contains the statistics for every simulation in the \textbf{p2s} table. There is a one-to-one relation between every row in both tables (this is encoded in the \textbf{simulation\_id} column described below).
+    \begin{itemize}
+        \item \textbf{id} int: A primary key which uniquely identifies each row
+        \item \textbf{simulation\_id} int: A foreign key pointing to the equivalent row in the \textbf{p2s} table from which these statistics were computed.
+        \item \textbf{probability} float: The occupation probability of the simulation associated with this row
+        \item \textbf{size} smallint: The size of the lattice used in the simulation associated with this row
+        \item \textbf{has\_percolate d} tinyint: Whether the associated lattice has percolated
+        \item \textbf{cluster\_size\_histogram} text: A histogram of the cluster sizes in the associated lattice
+        \item \textbf{mean\_cluster\_size} float: Average size of the clusters in the associated lattice
+        \item \textbf{correlation\_function} longtext: Correlation function approximation in the associated lattice
+        \item \textbf{percolating\_cluster\_strength} float: Percolating cluster strength in the associated lattice (0 if the lattice has not percolated).
+    \end{itemize}    
+    \item Table \textbf{p2m}: Exactly the same structure as the \textbf{p2s} table, but each row contains simulation data for a 2D Mandelbrot simulation.
+    \item Table \textbf{p2m\_stats}: Exactly the same structure as the \textbf{p2s\_stats} table, but contains the statistics for the Mandelbrot simulations stored in the \textbf{p2m} table.
+    
+\end{itemize}
+
+\clearpage
 \clearpage
 \chapter{Tables}
 \begin{table}[H]
@@ -37,9 +136,9 @@
     \hline
       Parameter &  value & standard deviation \\
     \hline
-      $a$ &    1.56(5)  &  0.08 \\
-      $b$ &    4.3(1) &  0.83 \\
-      $n$ & 0.786(6) & 0.0088 \\
+      $a$ &    1.56  &  0.08 \\
+      $b$ &    4.3 &  0.83 \\
+      $n$ & 0.786 & 0.0088 \\
     \hline
     \end{tabular}
 \end{center}
@@ -54,10 +153,10 @@
     \hline
       Parameter &  value & standard deviation \\
     \hline
-      $a$ &    38.2(8)  &  44.12 \\
-      $b$ &    0.22(1) &  0.053 \\
-      $c$ & 0.5907(2) & 0.00074 \\
-      $n$ & 0.10(7) & 0.02 \\
+      $a$ &    38.2  &  44.12 \\
+      $b$ &    0.22 &  0.053 \\
+      $c$ & 0.590 & 0.00074 \\
+      $n$ & 0.10 & 0.02 \\
     \hline
     \end{tabular}
 \end{center}
@@ -126,7 +225,7 @@
     \hline
       Parameter &  value & standard deviation \\
     \hline
-      $a$ &    4.02558273e+03  &  3.19001498e+06 \\
+      $a$ &    2.02558273e+03  &  3.19001498e+06 \\
       $b$ &    1.58092558e+02 &  9.87273040e+03 \\
       $c$ & 8.59573639e-03 & 6.62713676e+00  \\
       $n$ & -4.09236591e+03 & 3.19134574e+06 \\
@@ -144,9 +243,9 @@
     \hline
       Parameter &  value & standard deviation \\
     \hline
-      $a$ &    275.7(7)  &  31.85 \\
-      $b$ &    0.146(2) &  0.93 \\
-      $c$ & 0.5986(2) & 0.0040 \\
+      $a$ &    275.7  &  31.85 \\
+      $b$ &    0.146 &  0.93 \\
+      $c$ & 0.5986 & 0.0040 \\
       $n$ & 0.5566 & 0.05 \\
     \hline
     \end{tabular}

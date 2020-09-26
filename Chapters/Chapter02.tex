@@ -1,4 +1,5 @@
-\chapter{Experimental methods and results} 
+\chapter{Classical percolation - experimental methods and results} 
+\label{ch:classical_experimental}
 
 
 %----------------------------------------------------------------------------------------
@@ -99,16 +100,14 @@ $$
 Since $\beta$ represents occupation probability at which the percolation probability reaches 1/2, the limit above allows us to estimate $p_c$, the critical probability of our system - we do so by interpreting $p_c$ as $\beta$ in the limit of an infinite lattice. This value comes out to be $\mathbf{0.5907(2)}$.
 
 \subsection{Errors}
-
+\label{sec:error_perc_prob}
 The error estimates for the percolation probability were computed by treating it as a Bernoulli random variable. We used a 99\% confidence interval and the expression 
 
 $$ 
 \textrm{Error} = z \sqrt{\frac{\bar{p}(1-\bar{p})}{n}}
 $$
 
-where z is the value coming from the z-table for the desired confidence interval (numerically, $z=2.576$), $\bar{p}$ is the mean of the observations, and $n$ is the number of observations.
-
-See (REF) for more information.
+where z is the value coming from the z-table for the desired confidence interval (numerically, $z=2.576$), $\bar{p}$ is the mean of the observations, and $n$ is the number of observations\cite{bertsekas2008introduction}.
 
 \section{Percolating cluster strength}
 
@@ -125,13 +124,15 @@ Unfortunately, we were not able to find an ansatz that approximates this curve w
 
 
 \subsection{Errors}
+\label{sec:error_perc_strength}
 
-The errors in the calculation of $P(p)$ were estimated by computing the standard deviation of the sample of values obtained numerically.
+The errors in the calculation of $P(p)$ were estimated by splitting all observations for each $p$ (around 2000) into 20 bins, computing the mean value for $P(p)$ in each bin, and then computing the standard deviation mean values obtained across the different bins.
 
 
 \section{Mean cluster size}
 
 The mean cluster size $\chi(p)$ represents the average number of nodes in the finite clusters as defined in \autoref{sec:2d_lattice_simulation}. For each simulation, we loop over the finite clusters, adding their sizes. We then divide the sum by the number of finite clusters to get the average in a particular simulation/lattice. Afterwards, we average again, this time over lattices (of course, this averaging is only done over lattices with the same occupation probability $p$ and size $L$). 
+
 
 The results can be seen in \autoref{fig:sim_mean_cluster_size_1}.
 
@@ -147,6 +148,8 @@ The results can be seen in \autoref{fig:sim_mean_cluster_size_1}.
 As expected, we see a monotonic increase in $\chi(p)$ up to a maximum value, corresponding to some sort of critical value, and then a somewhat faster, monotonic decrease after the maximum. There is also an interesting kink close to $p=0.9$ which we did not investigate further.
 The presence of the peak immediately presents itself as an opportunity to check some of the facts presented in \autoref{sec:th_mean_cluster_size}. 
 
+
+Next, we study the peak position and height for each lattice size. Our goal is to make an educated guess on how these values change as we increase the lattice size. To estimate the peak height and occupation probability, we fitted a parabola to the 10 points closet the numerical peak (the point for which the height is maximum).
 
 \autoref{fig:sim_mean_cluster_size_peak_height} shows the peak height $H$ as a function of the lattice size we obtained from our data, and \autoref{table:pp_mean_cluster_size_peak_values} shows the precise values obtained.
 
@@ -191,41 +194,54 @@ $$
 So we conclude that this is, as predicted, evidence for the percolation threshold converging to a finite numerical value (namely, $c$). The precise values for all the fit parameters can be seen in \autoref{table:pp_mean_cluster_size_peak_position_finite_size_scaling_params}. Using this method, we estimate $p_c$ to be \textbf{0.5986(4)}. 
 
 \subsection{Errors}
+\label{sec:error_mean_clust_size}
 
-Again, the errors in the calculation of $\chi(p)$ are estimated by the standard deviation of the sample obtained numerically.
+The errors in the calculation of $\xi(p)$ were estimated by splitting all observations for each $p$ (around 2000) into 20 bins, computing the mean value for $P(p)$ in each bin, and then computing the standard deviation mean values obtained across the different bins. For the peak position and height, we errors were computing by taking the square root of the relevant diagonal term in the covariance matrix obtained from the least squares fit.
 
 \section{Correlation function and correlation length}
 
 
+Lastly, we turn our attention to the study of the correlation length. These are a quantities of great interest in general. Apart from being relevant in the study of many phenomena, they also have an intuitive interpretation: the correlation function, for example, can be used to assess the distance required between nodes for the values to be effectively uncorrelated. This distance is generally called the correlation length.
 
-The correlation function was estimated by repeatedly (128000 times) selecting two random nodes from the lattice, computing its distance (we used the Manhattan distance (REF)), and then checking whether they belong to the same finite cluster. Averaging over many lattices, this allows us to to estimate the probability that two nodes at a given distance belong to the same cluster, which is the definition of the correlation function $g(r)$.
+For each lattice simulation, the correlation function was estimated by  selecting a large number (approximately 200000) of random node pairs from the lattice, computing the distance between the nodes in the pair, and then checking whether they belong to the same finite cluster. Averaging over all selected pair a given distance $r$ away, this gives us an estimate of the probability of nodes whose distance is $r$ belonging to the same finite cluster, which is the definition of the correlation function $g(r)$. We then average this over many lattices.
 
-
-\begin{figure}[H]
-  \includegraphics[width=\linewidth]{Images/sim_corr_func_1.png}
-  \caption{Correlation function for various sizes and occupation probabilities}
-  \label{fig:sim_corr_func_1}
-\end{figure}
-
-
-To estimate the correlation length $\xi$, we fitted the data obtained above to the function below
-
+To estimate the correlation length $\xi$, we use the fact that
 $$ 
  g(r) \propto r^{-\nu} e^{-\frac{r}{\xi}}
 $$ 
 
-This gives us the plot below
+Which covers both the case in which $p=p_c$, and the case in which $|p - p_c| \ll 1$. It is somewhat surprising that this also provides a good approximation for the correlation function when even $|p - p_c| > 1$.
+
+
+The results for the correlation function can be seen in \autoref{fig:sim_corr_func_1}, along with the best fit using the ansatz above. Notice that this plot uses a logarithmic scale in the vertical direction. We give a higher weight to points with bigger $r$ - the reason for this is that the approximation gets better the bigger $r$ is (our goal is to approximate $\xi$, and its influence is only relevant for larger values of $r$). So even though the fit is not great for smaller values of $r$, this allows us to see the exponential decay, represented by the fact that the points are fitted to a line, fairly well.
+
+
+One interesting fact to mention here is that we get much better results if we use the Manhattan distance, as opposed to the Euclidean distance. The reason for this is not completely clear, but we hypothesize that this is because the Manhattan distance better matches the geometry of the lattice - a "diagonal neighbour", for example, is really two time further away than a nearest neighbour, as opposed to $\sqrt{2}$ times further away, which is what the Euclidean distance would give us.
+
+\autoref{fig:sim_corr_length_1} shows the correlation lengths obtained for multiple lattice sizes and occupation probabilities. 
+
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Images/sim_corr_func_2.png}
+  \caption{Correlation function for various sizes and occupation probabilities logarithmic scale in the vertical direction)}
+  \label{fig:sim_corr_func_1}
+\end{figure}
+
+There's a couple of interesting things to notice in \autoref{fig:sim_corr_length_1}. 
+The first is that errors are greatly increased to the right of the peaks. This happens because the errors in the correlation function increase when the occupation probability is in that range - and that, in turn, happens because as we increase the occupation probability $p$ past the $p_c$, many smaller merge clusters merge into the infinite cluster. So it gets much harder to find two pairs of nodes that are not part of the infinite cluster - essentially causing to correlation function to become closer and closer to being identically zero.
+
+More interestingly, though, is to compare the numerical values for correlation length with the square root of the mean cluster size. The square root is necessary since the mean cluster size is closer to an area, since it gives us the average number of nodes in a cluster. By taking its square root, we obtain some kind of "average linear size". By comparing this with the correlation length, we can see that the difference is bigger closer to the peaks, indicating finite size artifacts start to appear. Farther from the peak (which is also roughly the critical occupation probability), these two values are close to each other, indicating that the size of the lattice is sufficiently large so as to be representative of an infinite lattice. 
+
 
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{Images/sim_corr_length_1.png}
-  \caption{Correlation length for multiple lattice sizes}
+  \caption{Correlation length for multiple lattice sizes (logarithmic scale in the vertical direction)}
   \label{fig:sim_corr_length_1}
 \end{figure}
+    
 
+With this, we finish our analysis of the classical percolation model. Next, we'll look at the so called Mandelbrot percolation model.
 
-
-
-% In 2D percolation, it is normally assumed that $g(r)$ behaves as the product of a power function and a exponential function(REF4), i.e 
 
 
 \clearpage
