@@ -1,8 +1,6 @@
-% Chapter 1
+\chapter{Classical percolation - theoretical aspects}
 
-\chapter{Theoretical aspects}
-
-\label{ch:classicpercolation} % For referencing the chapter elsewhere, use \autoref{ch:introduction}
+\label{ch:theoreticalaspects} % For referencing the chapter elsewhere, use \autoref{ch:introduction}
 
 %----------------------------------------------------------------------------------------
 
@@ -48,18 +46,14 @@ A cluster $C$ in the lattice is defined as a subset of connected nodes $(i, j)$ 
 \end{figure}
 
 
+Percolation theory refers to the study of the structure of clusters formed in the lattice, given some choice of state map $S$. In standard percolation theory, one randomly (with probability $p$) assigns either state $0$ or state $1$ to each and every node in the lattice. Under these circumstances, the system presents a phase transition, when one varies the occupation probability $p$. There exists a critical value $p_c$ such that for $p > p_c$, the infinite lattice is said to "percolate", i.e. clusters spanning the whole lattice appear. For the 2D square lattice, the threshold is $p_c = 0.59274621(13)$\cite{Newman2000EfficientMC}. This number changes for different choices of $G$ and $N$.
 
 
-Percolation theory refers to the study of the structure of clusters formed in the lattice, given some choice of state map $S$. In standard percolation theory, one randomly (with probability $p$) assigns either state $0$ or state $1$ to each and every node in the lattice. Under these circumstances, the system presents a phase transition, when one varies the occupation probability $p$. There exists a critical value $p_c$ such that for $p > p_c$, the infinite lattice is said to "percolate", i.e. clusters spanning the whole lattice appear. For the 2D square lattice, the threshold is $p_c = 0.59274621(13)$. This number changes for different choices of $G$ and $N$.
-
-
-\autoref{fig:1dlattice} and \autoref{fig:2dlattice} provide examples of percolation in 1D and 2D lattices.
-
+\autoref{fig:1dlattice}, \autoref{fig:2dlattice}, and \autoref{fig:2dlattice_perc}  provide examples of percolation in 1D and 2D lattices.
 
 
 
-
-In biology, percolation theory has been used to successfully predict the fragmentation of biological virus shells (REF), with the percolation threshold of Hepatitis B virus capsid predicted and detected experimentally (REF). In environmental science, percolation theory has been applied to studies of how environment fragmentation impacts animal habitats (REF) and models of how the plague bacterium Yersinia pestis spreads (REF).
+In biology, percolation theory has been used to successfully predict the fragmentation of biological virus shells\cite{Brunk_2018}, with the percolation threshold of Hepatitis B virus capsid predicted and detected experimentally \cite{doi:10.1002/pro.3265}. In environmental science, percolation theory has been applied to studies of how environment fragmentation impacts animal habitats\cite{Boswell} and models of how the plague bacterium Yersinia pestis spreads\cite{Davis}.
 
 
 Our goal will be to study the behavior of some quantities of interest associated with percolation models.
@@ -70,21 +64,38 @@ Our goal will be to study the behavior of some quantities of interest associated
   \label{fig:2dlattice}
 \end{figure}
 
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Images/2dlattice_perc.png}
+  \caption{Percolation on a square lattice. Occupation probability is $0.56$. Grey cells of a square lattice correspond to the "alive" nodes isolated from maximal (white) cluster
+}
+  \label{fig:2dlattice_perc}
+\end{figure}
+
+
 \section{Percolating cluster strength}
 \label{sec:th_percolating_cluster_strength}
 
 The first interesting quantity we can look at is the percolating strength $P(p)$. This quantity  represents the probability that a randomly picked node belongs to the percolating cluster. Another way to think of this quantity is that it represents the fraction of the whole lattice that is covered by the percolating cluster. 
 
-For small values of $p$, all islands are finite. Starting at any randomly site, it is impossible to get arbitrarily far away by walking only along the connected sites. As we increase $p$, the largest cluster becomes infinite at a precise value $p = p_c$. When this happens, it is possible to get arbitrarily far from a starting point in the infinite cluster by walking along the connected sites. For $p < p_c$, there are no infinite clusters, so $P(p)$ vanishes. However, for $p > p_c$, $P(p)$ monotonically increases. For $1 \gg (p - p_c) > 0$, that is, for $p$ greater  but close to $p_c$, we have (REF 1):
+For small values of $p$, all islands are finite. Starting at any randomly site, it is impossible to get arbitrarily far away by walking only along the connected sites. As we increase $p$, the largest cluster becomes infinite at a precise value $p = p_c$. When this happens, it is possible to get arbitrarily far from a starting point in the infinite cluster by walking along the connected sites. For $p < p_c$, there are no infinite clusters, so $P(p)$ vanishes. However, for $p > p_c$, $P(p)$ monotonically increases. For $1 \gg (p - p_c) > 0$, that is, for $p$ greater  but close to $p_c$, we have\cite{intro_to_percolation_theory}:
 
 $$
     P(p) \propto (p - p_c)^\beta 
 $$
 
-The qualitative behaviour of $P(p)$ can be seen in figure (FIG 1)
+The qualitative behaviour of $P(p)$ can be seen in \autoref{fig:perc_clust_strength}.
 
 
-$\beta$ is a universal critical exponent which depends only on the lattice dimension, and not on its geometry. In 2 dimensions, $\beta = \frac{5}{36}$, is the same for the square, hexagonal, or any other geometry (REF 1). 
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{Images/perc_clust_strength.png}
+  \caption{Qualitative behavior of the percolating cluster strength as a function of the occupation probability for a very large lattice size}
+  \label{fig:perc_clust_strength}
+\end{figure}
+
+
+
+$\beta$ is a universal critical exponent which depends only on the lattice dimension, and not on its geometry. In 2 dimensions, $\beta = \frac{5}{36}$, is the same for the square, hexagonal, or any other geometry\cite{intro_to_percolation_theory}. 
 
 P(p) is one of the order parameters for percolating systems, since it is zero for $p < p_c$, and non-zero for $p > p_c$.
 
@@ -92,23 +103,23 @@ P(p) is one of the order parameters for percolating systems, since it is zero fo
 \section{Mean cluster size}
 \label{sec:th_mean_cluster_size}
 
-Another interesting quantity is $\chi(p)$, the mean cluster size, which is the average number of nodes in among finite clusters. One can think of each node in the cluster as having one "unit of mass", in which case the mean cluster size represents the average mass. Just like $P(p)$, for $\chi(p)$, we have
+Another interesting quantity is $\chi(p)$, the mean cluster size, which is the average number of nodes in among finite clusters. One can think of each node in the cluster as having one "unit of mass", in which case the mean cluster size represents the average mass. Just like $P(p)$, for $\chi(p)$, we have\cite{intro_to_percolation_theory}:
 
 $$ 
     \chi(p) \propto  |p - p_c|^{-\gamma} \textrm{,} \hspace{0.35cm}  \textrm{for} \hspace{0.15cm} |p - p_c| \ll 1 
 $$ 
 
-The qualitative behaviour of $\chi(p)$ can be seen in \autoref{fig:mean_cluster_size_1}
+The qualitative behaviour of $\chi(p)$ can be seen in \autoref{fig:sec2_mean_cluster_size_1}
 .
 
 \begin{figure}[H]
   \includegraphics[width=\linewidth]{Images/mean_cluster_size_1.png}
-  \caption{Percolation probability curve for various lattice sizes}
-  \label{fig:mean_cluster_size_1}
+  \caption{Qualitative behavior of the mean cluster size as a function of the occupation probability for a very large lattice size}
+  \label{fig:sec2_mean_cluster_size_1}
 \end{figure}
 
 
-Again, analogously to the percolating cluster strength $P(p)$, $\gamma$ is a universal critical exponent, in the sense that it's independent of the local geometry, and depends only on the dimension of the lattice. In two dimensions, $\gamma = \frac{43}{18}$. One important difference between $\chi(p)$ and $P(p)$, however, is that $\chi(p)$ scales as $|p - p_c|^\gamma$ for both $p < p_c$ and $p > p_c$. The constants of proportionality are different in either side.
+Again, analogously to the percolating cluster strength $P(p)$, $\gamma$ is a universal critical exponent, in the sense that it's independent of the local geometry, and depends only on the dimension of the lattice. In two dimensions, $\gamma = \frac{43}{18}$\cite{intro_to_percolation_theory}. One important difference between $\chi(p)$ and $P(p)$, however, is that $\chi(p)$ scales as $|p - p_c|^\gamma$ for both $p < p_c$ and $p > p_c$. The constants of proportionality are different in either side.
 
 
 \section{Correlation function and correlation length} 
@@ -116,7 +127,7 @@ Again, analogously to the percolating cluster strength $P(p)$, $\gamma$ is a uni
 The correlation function $g(\vec{r})$ encodes how likely it is that two clusters separated by a displacement vector $\vec{r}$ are part of the same (finite) cluster. In 2D,  based on rotational symmetry and in order to simplify the analysis, one often ignores the vector character of  $\vec{r}$ and studies only $g(r)$, where $r = |\vec{r}|$.
 
 
-For large values of $r$ and $p \neq p_c$, the correlation function decays exponentially: 
+For large values of $r$ and $p \neq p_c$, the correlation function decays exponentially\cite{intro_to_percolation_theory}: 
 
 $$ 
     g(r) \propto e^{-\frac{r}{\xi(r)}} \textrm{,} \hspace{0.35cm}  \textrm{for} \hspace{0.15cm} p \neq p_c, \hspace{0.15cm} r \gg 1 
@@ -131,7 +142,7 @@ $$
 $$ 
 
 
-Once more, the critical exponent $\eta$ is universal. In 2D, $\eta = \frac{5}{24}$. 
+Once more, the critical exponent $\eta$ is universal. In 2D, $\eta = \frac{5}{24}$\cite{intro_to_percolation_theory}. 
 
 When $p \neq p_c$, the correlation length defines a characteristic length scale. This is not the case when $p = p_c$: there's no characteristic length scale. The lattice is self similar and any finite piece is not enough to describe the behaviour of the system.
 
@@ -141,7 +152,7 @@ $$
     \xi(p) \propto  |p - p_c|^{-\nu} \textrm{,} \hspace{0.35cm}  \textrm{for} \hspace{0.15cm} |p - p_c| \ll 1 
 $$ 
 
-with $\nu$ the corresponding critical exponent, also universal. In 2D, $\nu = \frac{4}{3}$.
+with $\nu$ the corresponding critical exponent, also universal. In 2D, $\nu = \frac{4}{3}$\cite{intro_to_percolation_theory}.
 
 It is interesting to notice here the importance of considering only finite clusters: the correlation length remains finite both below and above the threshold $p_c$. As we increase $p$ past $p_c$, finite clusters begin forming connections to the infinite cluster, and so the probability that two nodes belong to the same finite cluster (which is what $g(r)$ measures) decreases, and so does the correlation length.  
 
@@ -153,7 +164,7 @@ $$
     n(s, p_c) \propto s^{-\tau}
 $$
 
-where $\tau$ is another universal exponent (in two dimensions, $\tau = \frac{187}{91}$). Once more, the system lacks a characteristic length scale. 
+where $\tau$ is another universal exponent (in two dimensions, $\tau = \frac{187}{91}$)\cite{applications_of_percolation_theory}. Once more, the system lacks a characteristic length scale. 
 Near $p_c$ and for large s, $n(s, p)$ is a generalized homogeneous function of $p - p_c$ and $\frac{1}{s}$. 
 
 A function of two variables $F(x, y)$ is said to be generalized homogeneous function iff 
@@ -182,7 +193,7 @@ $$
 n(1/s, p - p_c) = s^{-1/\alpha} n\big((p - p_c) c^{\beta / \alpha}\big)
 $$ 
 
-What this means is that by measuring $n(s, p)$ in units of $n(s, p_c)$, that is, by taking $\frac{n(s, p)}{n(s, p_c)}$ one does not need to consider it as a function of two variables $p$ and $s$: it reduces to a function which depends only on the combination $(p - p_c)s^\sigma$ for some sigma. In 2D, $\sigma = \frac{36}{91}$, which is also a critical exponent. 
+What this means is that by measuring $n(s, p)$ in units of $n(s, p_c)$, that is, by taking $\frac{n(s, p)}{n(s, p_c)}$ one does not need to consider it as a function of two variables $p$ and $s$: it reduces to a function which depends only on the combination $(p - p_c)s^\sigma$ for some sigma. In 2D, $\sigma = \frac{36}{91}$\cite{intro_to_percolation_theory}, which is also a critical exponent. 
 
 
 One of the reasons why $n(s, p)$ is one of the most interesting quantities to look at is that the order parameter (the percolating cluster strength), the mean finite cluster size, the correlation length and other quantities can all be derived from it. For this reason, $n(s, p)$ is called a generating function.
@@ -203,5 +214,4 @@ The mean cluster size $\chi(p)$ is related to $n(s, n)$ through
     \chi(p) = \sum_s s^2\, n(s, p)
 \end{equation}
 
-As noted before, $s\, n(s, p)$ represents the probability that a randomly picked node belongs to a (finite) s-cluster. Therefore, $\sum_s s^2\, n(s, p)$ represents the expected value of $s$.
-
+As noted before, $s\, n(s, p)$ represents the probability that a randomly picked node belongs to a (finite) s-cluster. Therefore, $\sum_s s^2\, n(s, p)$ represents the expected value of $s$.  

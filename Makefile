@@ -9,7 +9,6 @@ build:
 	rm percolation.blg
 	rm percolation.lof
 	rm percolation.log
-	rm percolation.lol
 	rm percolation.lot
 	rm percolation.out
 	rm percolation.run.xml

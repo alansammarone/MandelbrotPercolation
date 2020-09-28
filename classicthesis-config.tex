@@ -15,8 +15,8 @@
 \PassOptionsToPackage{eulerchapternumbers,listings,pdfspacing, subfig,beramono,eulermath,parts}{classicthesis}
 % Available options: drafting parts nochapters linedheaders eulerchapternumbers beramono eulermath pdfspacing minionprospacing tocaligned dottedtoc manychapters listings floatperchapter subfig
 
-\newcommand{\myTitle}{An analysis of 2D classical and Mandelbrot percolation models  \xspace}
-\newcommand{\mySubtitle}{An exploration of percolation 2D models \xspace}
+\newcommand{\myTitle}{An exploration classical and Mandelbrot percolation models \xspace}
+\newcommand{\mySubtitle}{A numerical comparison of percolation models and properties \xspace}
 \newcommand{\myDegree}{Physics (Bachelor of Science)\xspace}
 \newcommand{\myName}{Alan Sammarone\xspace}
 % \newcommand{\myProf}{Put name here\xspace}
@@ -37,6 +37,8 @@
 \newcommand{\Ie}{I.\,e.}
 \newcommand{\eg}{e.\,g.}
 \newcommand{\Eg}{E.\,g.}
+
+
 
 
 
@@ -63,7 +65,13 @@
 %%% of the width of the white spaces between the thext and
 %%% the margin note.
 %%
+\usepackage{afterpage}
 
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
 %------------------------------------------------
 
 %\PassOptionsToPackage{ngerman,american}{babel}  % Change this to your language(s)

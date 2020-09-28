@@ -35,8 +35,10 @@ In \autoref{fig:simm_perc_prob_2}, the first thing we notice is that the the cri
   \label{fig:simm_perc_prob_2}
 \end{figure}
 
-Just like in classical percolation, we fitted a hyperbolic tangent function to the data, and for $L=256$, which is the largest size we simulated for the Mandelbrot model, we find that the the percolation probability reaches the $0.5$ mark when $p=\textbf{0.1273}$. We point out that the fit is noticeably worse for the Mandelbrot model than in the case of classical percolation, which suggests an underlying fundamental difference between the models. Additionally, we notice that plots obtained for $L=128$ and $L=256$ are in relation to each other in a different way than the equivalent curves in the classical percolation case. In comparison with \autoref{fig:sim_perc_prob_2}, for example, one notices that whereas there, the curves have a sharp increase at very different occupation probabilities, here they are much closer to each other for low values of $p$, and remain much closer. We hypothesize that this happens, again, because the lattices are much more closely related here - the additional pass used in the $L=256$ happens at a smaller length scale and therefore has a less pronounced effect on the curve.
-The errors were computed using the same method as described in \autoref{sec:error_perc_prob}.
+Just like in classical percolation, we fitted a hyperbolic tangent function to the data, and for $L=256$, which is the largest size we simulated for the Mandelbrot model, we find that the the percolation probability reaches the $0.5$ mark when $p=\textbf{0.1273} \pm 0.021$. We point out that the fit is noticeably worse for the Mandelbrot model than in the case of classical percolation, which suggests an underlying fundamental difference between the models. Additionally, we notice that plots obtained for $L=128$ and $L=256$ are in relation to each other in a different way than the equivalent curves in the classical percolation case. In comparison with \autoref{fig:sim_perc_prob_2}, for example, one notices that whereas there, the curves have a sharp increase at very different occupation probabilities, here they are much closer to each other for low values of $p$, and remain much closer. We hypothesize that this happens, again, because the lattices are much more closely related here - the additional pass used in the $L=256$ happens at a smaller length scale and therefore has a less pronounced effect on the curve.
+
+The errors were computed using the same method as described in \autoref{sec:sim_perc_prob}.
+
 \section{Percolating cluster strength}
 
 The percolation cluster strength results for the Mandelbrot percolation simulations can be seen in \autoref{fig:simm_perc_clust_strength_1}. The curve looks qualitatively pretty similar to the one we had for classical percolation (see \autoref{fig:sim_perc_clust_strength_1}).
@@ -49,7 +51,9 @@ The percolation cluster strength results for the Mandelbrot percolation simulati
 \end{figure}
 
 Other than the lower values for the critical occupation probability discussed above, another interesting fact worth pointing out is that although for both models the curve becomes essentially a linear function towards higher values of the occupation probability $p$, the slope of the curve is noticeably smaller for the Mandelbrot case. The reason for this is not immediately obvious and warrants further investigation.
-The errors were computed using the same method as described in  \autoref{sec:error_perc_strength}.
+The errors were computed using the same method as described in \autoref{sec:sim_perc_clust_strength}.
+
+
 \section{Mean cluster size}
 
 The results for the mean cluster size can be seen in \autoref{fig:simm_mean_cluster_size_1}. 
@@ -61,7 +65,7 @@ The results for the mean cluster size can be seen in \autoref{fig:simm_mean_clus
 \end{figure}
 
 In comparison with the classical percolation plots (see \autoref{fig:sim_mean_cluster_size_1}), it is curious that the peak heights are smaller for the Mandelbrot percolation. The reason for this is, again not immediately obvious - the reader is invited to investigate this further.
-The errors were computed using the same method as described in \autoref{sec:error_mean_clust_size}.
+The errors were computed using the same method as described in \autoref{sec:sim_mean_clust_size}.
 
 \section{Conclusion}
 
